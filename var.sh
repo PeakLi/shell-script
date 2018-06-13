@@ -7,7 +7,9 @@ readonly myUrl
 myUrl="http://www.runoob.com"
 #删除变量
 unset varDemo
+#变量被删除后不能再次使用。unset 命令不能删除只读变量。
 echo $varDemo
+#单引号:单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；单引号字串中不能出现单引号（对单引号使用转义符后也不行）
 #双引号
 echo "Hello $myUrl"
 echo "Hello \"$myUrl\""
@@ -24,8 +26,9 @@ echo ${#string}
 string='abcde fghjk lmn'
 echo ${string:1:4}
 #查找子字符串 查找字符 "i 或 s" 的位置：
-string="runoob is a great company"
+string="rusnoob is a great company"
 echo `expr index "$string" is`  # 输出 8
+echo `expr index "$string" rs`  # 输出 1
 #注意： 以上脚本中 "`" 是反引号，而不是单引号 "'"，不要看错了哦。
 
 #Shell 数组
@@ -53,12 +56,13 @@ echo ${array_name[@]}
 #获取数组的长度
 #获取数组长度的方法与获取字符串长度的方法相同，例如：
 # 取得数组元素的个数
+# 使用@符号可以获取数组中的所有元素，例如：
 length=${#array_name[@]}
 echo length@ $length
 # 或者
 length=${#array_name[*]}
 echo length* $length
-# 取得数组单个元素的长度
+# 取得数组单个元素的长度,应该是第一个元素的长度
 length=${#array_name[n]}
 echo lengthn $length
 
@@ -70,49 +74,53 @@ echo lengthn $length
 #	这块代码就不会执行，达到了和注释一样的效果}
 
 #Linux 的字符串截取很有用有八种方法。
-# 1.号截取，删除左边字符，保留右边字符。
+# 1.号截取，删除左边字符，保留右边字符。最左边开始
 var=http://www.aaa.com/123.htm
-echo ${var#*//}
-
+echo 1:${var#*/}
 ## 号截取，删除左边字符，保留右边字符。
-echo ${var##*a}
-##*/ 表示从左边开始删除最后（最右边）一个 / 号及左边的所有字符
+echo 2:${var##*a}
+#2. ##*/ 表示从左边开始删除最后（最右边）一个 / 号及左边的所有字符。最右边开始
 #即删除 http://www.aaa.com/
 #结果是 123.htm
 
-#3. %号截取，删除右边字符，保留左边字符
-echo ${var%/*}
+#3. %号截取，删除右边字符，保留左边字符 最右边开始
+echo 3:${var%/*}
 #%/* 表示从右边开始，删除第一个 / 号及右边的字符
 #结果是：http://www.aaa.com
 
 #4. %% 号截取，删除右边字符，保留左边字符
-echo ${var%%/*}
+echo 4:${var%%/*}
 #%%/* 表示从右边开始，删除最后（最左边）一个 / 号及右边的字符
 #结果是：http:
 
 #5从左边第几个字符开始，及字符的个数
-echo ${var:0:5}
+echo 5:${var:0:5}
 
 #6. 从左边第几个字符开始，一直到结束。
-echo ${var:7}
+echo 6:${var:7}
 #其中的 7 表示左边第8个字符开始，一直到结束。
 #结果是 ：www.aaa.com/123.htm
 
 #7. 从右边第几个字符开始，及字符的个数
-echo ${var:0-7:3}
+echo 7:${var:0-7:3}
 #其中的 0-7 表示右边算起第七个字符开始，3 表示字符的个数。
 #结果是：123
 
 #8. 从右边第几个字符开始，一直到结束。
-echo ${var:0-7}
+echo 8:${var:0-7}
 echo 注：（左边的第一个字符是用 0 表示，右边的第一个字符用 0-1 表示）
 
 var="http://www.runoob.com/linux/linux-shell-variable.html"
 
 s1=${var%%t*}
+#h
 s2=${var%t*}
+#http://www.runoob.com/linux/linux-shell-variable.h
 s3=${var%%.*}
+#http://www
 s4=${var#*/}
+#/www.runoob.com/linux/linux-shell-variable.html
 s5=${var##*/}
-echo $s1 $s2 $s3 $s4 $5
+#linux-shell-variable.html
+echo $s1 $s2 $s3 $s4 $s5
 read -p "Press any key to continue" choice
